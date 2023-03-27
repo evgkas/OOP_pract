@@ -1,6 +1,4 @@
-﻿//type, number of gears, manufacture
-
-namespace OOP_pract
+﻿namespace OOP_pract
 {
     public class Transmission : Chassis
     {
@@ -26,8 +24,8 @@ namespace OOP_pract
         }
 
 
-        public Transmission(string TransmissionType, int GearsNumber, string manufacture, int WheelsNumber, 
-            string ChassisSerial, double MaxWeight, double power, double volume, string EngineType, 
+        public Transmission(string TransmissionType, int GearsNumber, string manufacture, int WheelsNumber,
+            string ChassisSerial, double MaxWeight, double power, double volume, string EngineType,
             string EngineSerial) : base(WheelsNumber, ChassisSerial, MaxWeight, power, volume, EngineType, EngineSerial)
         {
             this.TransmissionType = TransmissionType;

@@ -1,7 +1,4 @@
-﻿//power, volume, type ,serial number
-//parent class
-
-namespace OOP_pract
+﻿namespace OOP_pract
 {
     public class Engine
     {

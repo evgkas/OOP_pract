@@ -1,6 +1,4 @@
-﻿//number of wheels, serial number, max weight
-
-namespace OOP_pract
+﻿namespace OOP_pract
 {
     public class Chassis : Engine
     {
