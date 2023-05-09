@@ -1,27 +1,31 @@
 ﻿namespace OOP_pract
 {
-    public class Car : Transmission
+    public class Car
     {
-        public string CarType = "Undefined";
+        public string brand = "Undefined";
+        private static int counter = 111110;
+        public int id;
+        public Engine engine;
+        public Transmission transmission;
+        public Chassis chassis;
 
-        public Car(string CarType, string TransmissionType, int GearsNumber, string manufacture, int WheelsNumber,
-            string ChassisSerial, double MaxWeight, double power, double volume, string EngineType,
-            string EngineSerial) : base(TransmissionType, GearsNumber, manufacture, WheelsNumber,
-            ChassisSerial, MaxWeight, power, volume, EngineType, EngineSerial)
+        public Car(string brand, Engine engine, Transmission transmission, Chassis chassis)
         {
-            this.CarType = CarType;
+            this.engine = engine;
+            this.transmission = transmission;
+            this.chassis = chassis;
+            this.brand = brand;
+            counter++;
+            id = counter;
         }
 
-        public new void Print()
+        public void Print()
         {
-            Console.WriteLine(CarType);
-            Console.WriteLine("Transmission:");
-            Console.WriteLine($"Transmission type: {TransmissionType}, number of gears: {GearsNumber}, manufacture: {manufacture}");
-            Console.WriteLine("Chasis:");
-            Console.WriteLine($"Number of wheels: {WheelsNumber}, Chassis number: {ChassisSerial}, Max weight: {MaxWeight}");
-            Console.WriteLine("Engine:");
-            Console.WriteLine($"Power: {power}, Volume {volume} Engine type: {EngineType}, Serial number: {EngineSerial}");
-            Console.WriteLine("=======================================================");
+            Console.WriteLine($"{brand} with id = {id}");
+            engine.Print();
+            transmission.Print();
+            chassis.Print();
+            Console.WriteLine("=================================================");
         }
     }
 }

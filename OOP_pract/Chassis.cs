@@ -1,45 +1,22 @@
 ﻿namespace OOP_pract
 {
-    public class Chassis : Engine
+    public class Chassis
     {
-        public int WheelsNumber;
-        public string ChassisSerial;
-        public double MaxWeight;
+        public int wheelsNumber;
+        public string chassisSerial;
+        public double maxWeight;
 
-
-        public Chassis(int WheelsNumber, string ChassisSerial, double MaxWeight, double power, double volume,
-            string EngineType, string EngineSerial) : base(power, volume, EngineType, EngineSerial)
+        public Chassis(int wheelsNumber, string chassisSerial, double maxWeight)
         {
-            this.WheelsNumber = WheelsNumber;
-            this.ChassisSerial = ChassisSerial;
-            this.MaxWeight = MaxWeight;
+            this.wheelsNumber = wheelsNumber;
+            this.chassisSerial = chassisSerial;
+            this.maxWeight = maxWeight;
         }
 
-
-        public Chassis(int WheelsNumber, string ChassisSerial, double MaxWeight)
-        {
-            this.WheelsNumber = WheelsNumber;
-            this.ChassisSerial = ChassisSerial;
-            this.MaxWeight = MaxWeight;
-        }
-
-
-        public Chassis()
-        {
-            WheelsNumber = 4;
-            ChassisSerial = "AA0000";
-            MaxWeight = 1000;
-        }
-
-
-        public new void Print()
+        public void Print()
         {
             Console.WriteLine("Chasis:");
-            Console.WriteLine($"Number of wheels: {WheelsNumber}, Chassis number: {ChassisSerial}, Max weight: {MaxWeight}");
-            Console.WriteLine("Engine:");
-            Console.WriteLine($"Power: {power}, Volume {volume} Engine type: {EngineType}, " +
-                $"Serial number: {EngineSerial}");
+            Console.WriteLine($"Number of wheels: {wheelsNumber}, Chassis number: {chassisSerial}, Max weight: {maxWeight}");
         }
-
     }
 }

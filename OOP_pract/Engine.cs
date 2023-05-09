@@ -4,35 +4,21 @@
     {
         public double power { get; set; }
         public double volume { get; set; }
-        public string EngineType { get; set; }
-        public string EngineSerial { get; set; }
+        public string type { get; set; }
+        public string serialNumber { get; set; }
 
-
-        public Engine(double power, double volume, string EngineType, string EngineSerial)
+        public Engine(double power, double volume, string type, string serialNumber)
         {
             this.power = power;
             this.volume = volume;
-            this.EngineType = EngineType;
-            this.EngineSerial = EngineSerial;
-
+            this.type = type;
+            this.serialNumber = serialNumber;
         }
-
-
-        public Engine()
-        {
-            power = 1;
-            volume = 1;
-            EngineType = "v6";
-            EngineSerial = "111111AAA";
-
-        }
-
 
         public void Print()
         {
             Console.WriteLine("Engine:");
-            Console.WriteLine($"Power: {power}, Volume {volume} Engine type: {EngineType}, " +
-                $"Serial number: {EngineSerial}");
+            Console.WriteLine($"Power: {power}, Volume: {volume}, Engine type: {type}, Serial number: {serialNumber}");
         }
     }
 }
