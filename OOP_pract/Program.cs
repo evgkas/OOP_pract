@@ -50,8 +50,8 @@ public class Program
                         "in the List");
                 }
             }
-            cars.Add(testCar2);
 
+            cars.Add(testCar2);
         }
         catch (AddException) { }
 
