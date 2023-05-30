@@ -1,4 +1,4 @@
-﻿namespace OOP_pract
+﻿namespace OOP_pract.ExceptionHandler
 {
     public class AddException : Exception
     {

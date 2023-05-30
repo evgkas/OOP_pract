@@ -1,6 +1,7 @@
 ﻿using OOP_pract;
-using System.Xml;
-using System.Xml.Linq;
+using OOP_pract.Cars;
+using OOP_pract.ExceptionHandler;
+using OOP_pract.Parts;
 
 public class Program
 {
@@ -15,7 +16,7 @@ public class Program
         Engine busEngine = new(300, 3, "gas", "000003eng");
         Transmission busTransmission = new("manual", 10, "Reno");
         Chassis busChassis = new(6, "111113ch", 5000);
-        Engine scooterEngine = new(50, 40, "gas", "000005eng");
+        Engine scooterEngine = new(50, 0.040, "gas", "000005eng");
         Transmission scooterTransmission = new("auto", 4, "KIA");
         Chassis scooterChassis = new(2, "111115ch", 150);
 
@@ -29,126 +30,12 @@ public class Program
             new Scooter("KIA", 0, scooterEngine, scooterTransmission, scooterChassis),
             new Truck("Mercedes", 0, new Engine(500, 4.5, "gas", "000006eng"), new Transmission("manual", 8, "Mercedes"),
             new Chassis(6, "111116ch", 10000)),
-        };   
+        };
 
-        var carsByVolume = from c in cars
-                           where c.engine.volume > 1.5
-                           select c;
-
-        XmlWriterSettings settings = new XmlWriterSettings();
-        settings.Indent = true;
-        settings.IndentChars = ("    ");
-        settings.CloseOutput = true;
-        settings.OmitXmlDeclaration = true;
-
-        using (XmlWriter writer = XmlWriter.Create("carsByVolume.xml", settings))
-        {
-            writer.WriteStartDocument();
-            writer.WriteStartElement("Vechiles");
-            foreach (var car in carsByVolume)
-            {
-                writer.WriteStartElement($"{car.brand}");
-                writer.WriteElementString("id", $"{car.id}");
-
-                if (car is Truck truck)
-                {
-                    writer.WriteElementString($"maxTrailers", $"{truck.maxTrailers}");
-                }
-                else if (car is Bus bus)
-                {
-                    writer.WriteElementString($"maxPassengers", $"{bus.maxPassengers}");
-                }
-                else if (car is Scooter scooter)
-                {
-                    writer.WriteElementString($"luggageVolume", $"{scooter.luggageVolume}");
-                }
-
-                writer.WriteStartElement($"Transmission");
-                writer.WriteElementString("Type", $"{car.transmission.type}");
-                writer.WriteElementString("gearsNumber", $"{car.transmission.gearsNumber}");
-                writer.WriteElementString("manufacture", $"{car.transmission.manufacture}");
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("Chassis");
-                writer.WriteElementString("numberOfWhhels", $"{car.chassis.wheelsNumber}");
-                writer.WriteElementString("serialNumber", $"{car.chassis.chassisSerial}");
-                writer.WriteElementString("maxWeight", $"{car.chassis.maxWeight}");
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("Engine");
-                writer.WriteElementString("power", $"{car.engine.power}");
-                writer.WriteElementString("volume", $"{car.engine.volume}");
-                writer.WriteElementString("type", $"{car.engine.type}");
-                writer.WriteElementString("SerialNumber", $"{car.engine.serialNumber}");
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-            writer.WriteEndDocument();
-            writer.Flush();
-        }
-
-        var enginesToXML = new XElement("Root",
-            from c in cars
-            where ((c is Bus) || (c is Truck))
-            select new XElement("Vechile",
-                       new XElement("Serial", c.engine.serialNumber),
-                       new XElement("Power", c.engine.power),
-                       new XElement("Type", c.engine.type)
-                    )
-                );
-        enginesToXML.Save("engines.xml");
-
-        var orderedCars = from c in cars
-                          orderby c.transmission.type
-                          select c;
-
-        using (XmlWriter writer = XmlWriter.Create("orderedCars.xml", settings))
-        {
-            writer.WriteStartDocument();
-            writer.WriteStartElement("Vechiles");
-            foreach (var car in carsByVolume)
-            {
-                writer.WriteStartElement($"{car.brand}");
-                writer.WriteElementString("id", $"{car.id}");
-
-                if (car is Truck truck)
-                {
-                    writer.WriteElementString($"maxTrailers", $"{truck.maxTrailers}");
-                }
-                else if (car is Bus bus)
-                {
-                    writer.WriteElementString($"maxPassengers", $"{bus.maxPassengers}");
-                }
-                else if (car is Scooter scooter)
-                {
-                    writer.WriteElementString($"luggageVolume", $"{scooter.luggageVolume}");
-                }
-
-                writer.WriteStartElement($"Transmission");
-                writer.WriteElementString("Type", $"{car.transmission.type}");
-                writer.WriteElementString("GearsNumber", $"{car.transmission.gearsNumber}");
-                writer.WriteElementString("Manufacture", $"{car.transmission.manufacture}");
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("Chassis");
-                writer.WriteElementString("NumberOfWhhels", $"{car.chassis.wheelsNumber}");
-                writer.WriteElementString("SerialNumber", $"{car.chassis.chassisSerial}");
-                writer.WriteElementString("MaxWeight", $"{car.chassis.maxWeight}");
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("Engine");
-                writer.WriteElementString("Power", $"{car.engine.power}");
-                writer.WriteElementString("Volume", $"{car.engine.volume}");
-                writer.WriteElementString("Type", $"{car.engine.type}");
-                writer.WriteElementString("SerialNumber", $"{car.engine.serialNumber}");
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-            }
-            writer.WriteEndDocument();
-            writer.Flush();
-        }
+        XmlCreator creator = new();
+        creator.OrderByTransmissionType(cars, "carsOrderedByTransmission.xml");
+        creator.BusAndTrucksEnginesInfo(cars, "busAndTrucksEngines.xml");
+        creator.CarsEngineVolumeAbove(cars, 1.5, "orderedByVolumeCars.xml");
 
         //exception part below
 
@@ -172,21 +59,29 @@ public class Program
         {
             int idToFind = 111111;
             var carToUpdate = cars.FirstOrDefault(c => c.id == idToFind);
+
             if (carToUpdate != null)
             {
                 carToUpdate.transmission.manufacture = "BMW";
                 Console.WriteLine("Car updated");
             }
-            else throw new UpdateAutoException($"Cant find car with id = {idToFind}");
+            else
+            {
+                throw new UpdateAutoException($"Cant find car with id = {idToFind}");
+            }
 
             idToFind = 0;
             carToUpdate = cars.FirstOrDefault(c => c.id == idToFind);
+
             if (carToUpdate != null)
             {
                 carToUpdate.transmission.manufacture = "BMW";
                 Console.WriteLine("Car updated");
             }
-            else throw new UpdateAutoException($"Cant find car with id = {idToFind}");
+            else
+            {
+                throw new UpdateAutoException($"Cant find car with id = {idToFind}");
+            }
         }
         catch (UpdateAutoException) { }
 
@@ -201,12 +96,16 @@ public class Program
             foreach (var idToRemove in idsToRemove)
             {
                 var carToRemove = cars.FirstOrDefault(c => c.id == idToRemove);
+
                 if (carToRemove != null)
                 {
                     cars.Remove(carToRemove);
                     Console.WriteLine($"Car with id = {idToRemove} deleted");
                 }
-                else throw new RemoveAutoException($"Cars with id = {idToRemove} is not exist");
+                else
+                {
+                    throw new RemoveAutoException($"Cars with id = {idToRemove} is not exist");
+                }
             }
         }
         catch (RemoveAutoException) { }
@@ -221,6 +120,7 @@ public class Program
         {
             var result = new List<Car>();
             parameter = parameter.ToLower();
+
             try
             {
                 foreach (var car in cars)
@@ -232,48 +132,56 @@ public class Program
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "transmissiontype":
                             if (car.transmission.type.ToLower() == value.ToLower())
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "gearsnumber":
                             if (car.transmission.gearsNumber == Convert.ToUInt32(value))
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "manufacture":
                             if (car.transmission.manufacture.ToLower() == value.ToLower())
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "wheelsnumber":
                             if (car.chassis.wheelsNumber == Convert.ToUInt32(value))
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "chassisserial":
                             if (car.chassis.chassisSerial.ToLower() == value.ToLower())
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "maxweight":
                             if (car.chassis.maxWeight == Convert.ToDouble(value))
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "power":
                             if (car.engine.power == Convert.ToDouble(value))
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "volume":
                             double volumeValue;
@@ -281,18 +189,21 @@ public class Program
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "enginetype":
                             if (car.engine.type.ToLower() == value.ToLower())
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "engineserial":
                             if (car.engine.serialNumber.ToLower() == value.ToLower())
                             {
                                 result.Add(car);
                             }
+
                             break;
                         case "maxtrailers":
                             if (car is Truck truck)
@@ -302,6 +213,7 @@ public class Program
                                     result.Add(car);
                                 }
                             }
+
                             break;
                         case "maxpassengers":
                             if (car is Bus bus)
@@ -311,6 +223,7 @@ public class Program
                                     result.Add(car);
                                 }
                             }
+
                             break;
                         case "luggagevolume":
                             if (car is Scooter scooter)
@@ -320,19 +233,23 @@ public class Program
                                     result.Add(car);
                                 }
                             }
+
                             break;
                         default:
                             throw new GetAutoByParameterException($"There is no {parameter} parameter");
                     }
                 }
+
                 if (result.Capacity == 0)
                 {
                     Console.WriteLine($"These no auto with {parameter} = {value}");
                 }
+
                 foreach (var car in result)
                 {
-                    car.Print();    //printing information about finded auto
+                    car.Print();    //print information about finded auto
                 }
+
                 return result;
             }
             catch (GetAutoByParameterException)

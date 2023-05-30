@@ -1,4 +1,7 @@
-﻿namespace OOP_pract
+﻿using OOP_pract.ExceptionHandler;
+using OOP_pract.Parts;
+
+namespace OOP_pract.Cars
 {
     public class Bus : Car
     {
@@ -13,6 +16,7 @@
                 {
                     throw new InitializationException("maxPassengers for Bus must be above 8. maxPassengers set to 9");
                 }
+
                 this.maxPassengers = maxPassengers;
             }
             catch (InitializationException) { }

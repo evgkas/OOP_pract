@@ -1,4 +1,6 @@
-﻿namespace OOP_pract
+﻿using OOP_pract.Parts;
+
+namespace OOP_pract.Cars
 {
     public class Car
     {

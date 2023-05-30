@@ -1,6 +1,6 @@
-﻿namespace OOP_pract
+﻿namespace OOP_pract.ExceptionHandler
 {
-    internal class RemoveAutoException : Exception
+    public class RemoveAutoException : Exception
     {
         public RemoveAutoException() : base() { }
 

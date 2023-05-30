@@ -1,11 +1,11 @@
-﻿namespace OOP_pract
+﻿namespace OOP_pract.Parts
 {
     public class Engine
     {
-        public double power { get; set; }
-        public double volume { get; set; }
-        public string type { get; set; }
-        public string serialNumber { get; set; }
+        public double power;
+        public double volume;
+        public string type;
+        public string serialNumber;
 
         public Engine(double power, double volume, string type, string serialNumber)
         {

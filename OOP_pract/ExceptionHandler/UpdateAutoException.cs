@@ -1,6 +1,6 @@
-﻿namespace OOP_pract
+﻿namespace OOP_pract.ExceptionHandler
 {
-    internal class UpdateAutoException : Exception
+    public class UpdateAutoException : Exception
     {
         public UpdateAutoException() : base() { }
 
@@ -8,6 +8,7 @@
         {
             Console.WriteLine(message);
         }
+
         public UpdateAutoException(string message, Exception innerException) : base(message, innerException)
         {
             Console.WriteLine(message);
